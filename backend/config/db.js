@@ -21,28 +21,39 @@ let pool;
 async function getPool() {
   if (!pool) {
     pool = await sql.connect(config);
-    // Set IST timezone offset for all sessions — GETDATE() will now return IST
-    // SQL Server doesn't support SET TIMEZONE, so we run this on each new connection
-    // via a post-connect query. All timestamps stored/read will be IST.
-    try {
-      await pool.request().query(`SET DATEFORMAT dmy`);
-    } catch(e) {}
+    try { await pool.request().query(`SET DATEFORMAT dmy`); } catch(e) {}
     console.log(`✅  SQL Server connected → ${process.env.DB_NAME}`);
   }
   return pool;
+}
+
+// ── Date-like string detection ───────────────────────────────────
+// Matches: 'YYYY-MM-DD', 'YYYY-MM-DDTHH:MM:SS', 'YYYY-MM-DD HH:MM:SS'
+const DATE_RE = /^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$/;
+
+function bindParam(r, k, v) {
+  if (v === null || v === undefined) {
+    // Use NVarChar(null) — SQL Server will cast NULL to any column type correctly
+    r.input(k, sql.NVarChar(50), null);
+  } else if (typeof v === 'boolean') {
+    r.input(k, sql.Bit, v);
+  } else if (typeof v === 'string' && DATE_RE.test(v.trim())) {
+    // Date/datetime string — pass as NVarChar so SQL Server auto-casts to DATE/DATETIME
+    r.input(k, sql.NVarChar(50), v.trim());
+  } else if (Number.isInteger(v)) {
+    r.input(k, sql.Int, v);
+  } else if (typeof v === 'number') {
+    r.input(k, sql.Decimal(18, 4), v);
+  } else {
+    r.input(k, sql.NVarChar(sql.MAX), String(v));
+  }
 }
 
 // Simple query helper — uses named params @paramName
 async function query(queryStr, params = {}) {
   const p = await getPool();
   const r = p.request();
-  for (const [k, v] of Object.entries(params)) {
-    if      (v === null || v === undefined) r.input(k, sql.Int, null);  // default null as Int (safe for FK cols)
-    else if (typeof v === 'boolean')        r.input(k, sql.Bit, v);
-    else if (Number.isInteger(v))           r.input(k, sql.Int, v);
-    else if (typeof v === 'number')         r.input(k, sql.Decimal(10,2), v);
-    else                                    r.input(k, sql.NVarChar(sql.MAX), String(v));
-  }
+  for (const [k, v] of Object.entries(params)) bindParam(r, k, v);
   return r.query(queryStr);
 }
 
@@ -50,13 +61,7 @@ async function query(queryStr, params = {}) {
 async function exec(proc, params = {}) {
   const p = await getPool();
   const r = p.request();
-  for (const [k, v] of Object.entries(params)) {
-    if      (v === null || v === undefined) r.input(k, sql.Int, null);
-    else if (typeof v === 'boolean')        r.input(k, sql.Bit, v);
-    else if (Number.isInteger(v))           r.input(k, sql.Int, v);
-    else if (typeof v === 'number')         r.input(k, sql.Decimal(10,2), v);
-    else                                    r.input(k, sql.NVarChar(sql.MAX), String(v));
-  }
+  for (const [k, v] of Object.entries(params)) bindParam(r, k, v);
   return r.execute(proc);
 }
 

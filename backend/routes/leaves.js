@@ -22,10 +22,22 @@ const upload = multer({
 
 router.use(auth);
 
-/* GET /api/leaves/types */
+/* GET /api/leaves/types — returns only gender-appropriate types for logged-in user */
 router.get('/types', async (req, res) => {
   try {
-    const r = await query('SELECT * FROM dbo.LeaveTypes WHERE IsActive=1 ORDER BY TypeCode');
+    // Get user's gender
+    const ug = await query('SELECT Gender FROM dbo.Users WHERE UserID=@id', { id: req.user.userID });
+    const gender = ug.recordset[0]?.Gender || null;
+
+    const r = await query(
+      `SELECT * FROM dbo.LeaveTypes
+       WHERE IsActive=1
+         AND (AllowedGender IS NULL
+              OR AllowedGender = @g
+              OR @g IS NULL)
+       ORDER BY TypeCode`,
+      { g: gender }
+    );
     res.json(r.recordset);
   } catch { res.status(500).json({ error: 'Server error' }); }
 });
@@ -37,13 +49,22 @@ router.get('/balance', async (req, res) => {
   if (req.user.role === 'employee' && uid !== req.user.userID)
     return res.status(403).json({ error: 'Access denied' });
   try {
+    // Get user's gender to filter gender-restricted leave types
+    const gRes = await query('SELECT Gender FROM dbo.Users WHERE UserID=@id', { id: uid });
+    const gender = gRes.recordset[0]?.Gender || null;
+
     const r = await query(
       `SELECT lb.TotalDays, lb.UsedDays, lb.RemainingDays,
-              lt.TypeCode, lt.TypeName, lt.ColorHex, lt.MaxDaysPerYear
+              lt.LeaveTypeID, lt.TypeCode, lt.TypeName, lt.ColorHex, lt.MaxDaysPerYear,
+              lt.AllowedGender
        FROM dbo.LeaveBalances lb
        JOIN dbo.LeaveTypes lt ON lb.LeaveTypeID=lt.LeaveTypeID
-       WHERE lb.UserID=@uid AND lb.Year=@year AND lt.IsActive=1 ORDER BY lt.TypeCode`,
-      { uid, year }
+       WHERE lb.UserID=@uid AND lb.Year=@year AND lt.IsActive=1
+         AND (lt.AllowedGender IS NULL
+              OR lt.AllowedGender = @g
+              OR @g IS NULL)
+       ORDER BY lt.TypeCode`,
+      { uid, year, g: gender }
     );
     res.json(r.recordset);
   } catch { res.status(500).json({ error: 'Server error' }); }
@@ -73,6 +94,22 @@ router.post('/apply', upload.single('attachment'), async (req, res) => {
   const { leaveTypeID, fromDate, toDate, totalDays, isHalfDay, halfDaySession, reason } = req.body;
   if (!leaveTypeID || !fromDate || !toDate || !reason)
     return res.status(400).json({ error: 'leaveTypeID, fromDate, toDate, reason required' });
+
+    // Gender restriction check
+    const gCheck = await query(
+      `SELECT lt.AllowedGender, u.Gender
+       FROM dbo.LeaveTypes lt, dbo.Users u
+       WHERE lt.LeaveTypeID=@lt AND u.UserID=@uid`,
+      { lt: parseInt(leaveTypeID), uid: req.user.userID }
+    );
+    if (gCheck.recordset[0]) {
+      const { AllowedGender, Gender } = gCheck.recordset[0];
+      if (AllowedGender && Gender && AllowedGender !== Gender) {
+        return res.status(403).json({
+          error: `This leave type is only available for ${AllowedGender} employees`
+        });
+      }
+    }
   try {
     const r = await exec('dbo.sp_ApplyLeave', {
       UserID: req.user.userID, LeaveTypeID: parseInt(leaveTypeID),

@@ -174,6 +174,7 @@ async function renderEmployees(container) {
             managerID:    document.getElementById('ne-mgr').value,
             phone:        document.getElementById('ne-phone').value,
             joinedDate:   document.getElementById('ne-joined').value,
+            gender:       document.getElementById('ne-gender')?.value || null,
           };
           if (!fd.fullName||!fd.email||!fd.password) return toast.error('Name, email and password required.');
           try { await api.addUser(fd); toast.success('Employee added!'); showAdd=false; statusTab='active'; render(); }
@@ -202,6 +203,7 @@ async function renderEmployees(container) {
             departmentID: document.getElementById(`e-dept-${id}`)?.value,
             managerID:    document.getElementById(`e-mgr-${id}`)?.value || null,
             dateOfBirth:  document.getElementById(`e-dob-${id}`)?.value || null,
+            gender:       document.getElementById(`e-gender-${id}`)?.value || null,
           };
           try { await api.updateUser(id,d); toast.success('Updated!'); editID=null; render(); }
           catch(e){ toast.error(e.message); }
@@ -277,6 +279,13 @@ async function renderEmployees(container) {
         </div>
         <div class="form-group"><label class="form-label">Date of Joining</label>
           <input class="form-control" id="ne-joined" type="date" value="${todayStr()}" /></div>
+        <div class="form-group"><label class="form-label">Gender</label>
+          <select class="form-control" id="ne-gender">
+            <option value="">— Select —</option>
+            <option value="male">♂ Male</option>
+            <option value="female">♀ Female</option>
+            <option value="other">⚧ Other</option>
+          </select></div>
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-primary" id="add-emp-btn">Add Employee</button>
@@ -367,6 +376,9 @@ async function renderEmployees(container) {
               ${roleChip(u.Role)}
               <span style="font-size:.75rem;color:#8993a4">${u.DepartmentName||'—'}</span>
               ${mgr?`<span style="font-size:.74rem;color:#8993a4">· ${mgr.FullName}</span>`:''}
+              ${u.Gender==='male'  ?`<span style="background:#eff6ff;color:#3b82f6;border-radius:20px;padding:1px 7px;font-size:.68rem;font-weight:700">♂ Male</span>`:''}
+              ${u.Gender==='female'?`<span style="background:#fdf2f8;color:#ec4899;border-radius:20px;padding:1px 7px;font-size:.68rem;font-weight:700">♀ Female</span>`:''}
+              ${u.Gender==='other' ?`<span style="background:#f5f3ff;color:#8b5cf6;border-radius:20px;padding:1px 7px;font-size:.68rem;font-weight:700">⚧ Other</span>`:''}
             </div>
           </div>
         </div>
@@ -431,6 +443,15 @@ async function renderEmployees(container) {
             <label class="form-label">🎂 Date of Birth</label>
             <input class="form-control" type="date" id="e-dob-${u.UserID}"
                    value="${u.DateOfBirth ? String(u.DateOfBirth).slice(0,10) : ''}" />
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label">Gender</label>
+            <select class="form-control" id="e-gender-${u.UserID}">
+              <option value="">— Select —</option>
+              <option value="male"   ${u.Gender==='male'  ?'selected':''}>♂ Male</option>
+              <option value="female" ${u.Gender==='female'?'selected':''}>♀ Female</option>
+              <option value="other"  ${u.Gender==='other' ?'selected':''}>⚧ Other</option>
+            </select>
           </div>
         </div>
         <button class="btn btn-primary btn-sm" data-save="${u.UserID}">Save Changes</button>

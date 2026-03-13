@@ -11,7 +11,7 @@ router.use(auth);
 router.get('/me', async (req, res) => {
   try {
     const r = await query(
-      `SELECT u.UserID,u.EmployeeCode,u.FullName,u.Email,u.Role,u.Phone,u.JoinedDate,u.DateOfBirth,
+      `SELECT u.UserID,u.EmployeeCode,u.FullName,u.Email,u.Role,u.Phone,u.JoinedDate,u.DateOfBirth,u.Gender,
               d.DepartmentName, m.FullName AS ManagerName
        FROM dbo.Users u
        LEFT JOIN dbo.Departments d ON u.DepartmentID=d.DepartmentID
@@ -69,7 +69,7 @@ router.get('/', role('hr','manager'), async (req, res) => {
   if (isActive === 'false') activeFilter = 'WHERE u.IsActive=0';
   if (isActive === 'all')   activeFilter = 'WHERE 1=1';
 
-  let sql = `SELECT u.UserID,u.EmployeeCode,u.FullName,u.Email,u.Role,u.Phone,u.JoinedDate,u.IsActive,u.DateOfBirth,
+  let sql = `SELECT u.UserID,u.EmployeeCode,u.FullName,u.Email,u.Role,u.Phone,u.JoinedDate,u.IsActive,u.DateOfBirth,u.Gender,
                     d.DepartmentName, d.DepartmentID,
                     m.FullName AS ManagerName, m.UserID AS ManagerID
              FROM dbo.Users u
@@ -87,7 +87,7 @@ router.get('/', role('hr','manager'), async (req, res) => {
 
 /* POST /api/users  (hr) */
 router.post('/', role('hr'), async (req, res) => {
-  const { fullName, email, password, userRole, departmentID, managerID, phone, joinedDate, employeeCode } = req.body;
+  const { fullName, email, password, userRole, departmentID, managerID, phone, joinedDate, employeeCode, gender } = req.body;
   if (!fullName || !email || !password || !userRole)
     return res.status(400).json({ error: 'fullName, email, password, role required' });
   try {
@@ -102,25 +102,32 @@ router.post('/', role('hr'), async (req, res) => {
 
     const hash = await bcrypt.hash(password, 10);
     const r = await query(
-      `INSERT INTO dbo.Users(FullName,Email,PasswordHash,Role,DepartmentID,ManagerID,Phone,JoinedDate,EmployeeCode)
+      `INSERT INTO dbo.Users(FullName,Email,PasswordHash,Role,DepartmentID,ManagerID,Phone,JoinedDate,EmployeeCode,Gender)
        OUTPUT INSERTED.UserID
-       VALUES(@n,@e,@h,@r,@d,@m,@p,@j,@ec)`,
+       VALUES(@n,@e,@h,@r,@d,@m,@p,@j,@ec,@g)`,
       { n: fullName, e: email, h: hash, r: userRole,
         d: departmentID ? parseInt(departmentID) : null,
         m: managerID    ? parseInt(managerID)    : null,
         p: phone || null,
         j: joinedDate || new Date().toISOString().slice(0,10),
-        ec: employeeCode || null }
+        ec: employeeCode || null,
+        g:  gender ? gender.toLowerCase() : null }
     );
     const newID = r.recordset[0].UserID;
     // Auto-assign code if not provided
     if (!employeeCode) {
       await query("UPDATE dbo.Users SET EmployeeCode='EMP'+RIGHT('0000'+CAST(@uid AS NVARCHAR),4) WHERE UserID=@uid AND EmployeeCode IS NULL", { uid: newID });
     }
+    // Insert leave balances — skip gender-restricted types that don't match employee gender
     await query(
       `INSERT INTO dbo.LeaveBalances(UserID,LeaveTypeID,Year,TotalDays)
-       SELECT @uid,LeaveTypeID,YEAR(GETDATE()),MaxDaysPerYear FROM dbo.LeaveTypes WHERE IsActive=1`,
-      { uid: newID }
+       SELECT @uid,LeaveTypeID,YEAR(GETDATE()),MaxDaysPerYear
+       FROM dbo.LeaveTypes
+       WHERE IsActive=1
+         AND (AllowedGender IS NULL
+              OR AllowedGender = @g
+              OR @g IS NULL)`,
+      { uid: newID, g: gender ? gender.toLowerCase() : null }
     );
 
     // Get final employee code (may have been auto-generated)
@@ -142,7 +149,7 @@ router.post('/', role('hr'), async (req, res) => {
 
 /* PATCH /api/users/:id  (hr) */
 router.patch('/:id', role('hr'), async (req, res) => {
-  const { fullName, phone, userRole, departmentID, managerID, isActive, employeeCode, dateOfBirth } = req.body;
+  const { fullName, phone, userRole, departmentID, managerID, isActive, employeeCode, dateOfBirth, gender } = req.body;
   const uid = parseInt(req.params.id);
   try {
     // Check employee code uniqueness if provided
@@ -165,6 +172,7 @@ router.patch('/:id', role('hr'), async (req, res) => {
     if (isActive     !== undefined) { sets.push('IsActive=@a');      p.a  = isActive ? 1 : 0; }
     if (employeeCode !== undefined) { sets.push('EmployeeCode=@ec'); p.ec = employeeCode || null; }
     if (dateOfBirth  !== undefined) { sets.push('DateOfBirth=@dob'); p.dob = dateOfBirth || null; }
+    if (gender       !== undefined) { sets.push('Gender=@g');       p.g   = gender ? gender.toLowerCase() : null; }
 
     if (sets.length === 0) return res.json({ message: 'Nothing to update' });
 
