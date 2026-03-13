@@ -35,16 +35,23 @@ if (_origRenderProfile) {
   };
 }
 
-function _injectGenderInProfile(container) {
+async function _injectGenderInProfile(container) {
   if (container.querySelector('[data-gender-injected]')) return;
 
-  // Find the info grid — look for all small label+value cells
+  // Always fetch fresh from API — localStorage may be stale
+  let gender = null;
+  try {
+    const profile = await api.me();
+    gender = profile?.Gender || profile?.gender || null;
+  } catch(e) {
+    // fallback to localStorage
+    const user = getUser();
+    gender = user?.Gender || user?.gender || null;
+  }
+
+  // Find the info grid cells
   const cells = container.querySelectorAll('[style*="background:var(--bg)"][style*="border-radius"]');
   if (!cells.length) return;
-
-  // Get gender from /me API result (stored in DOM or re-fetch)
-  const user = getUser();
-  const gender = user?.Gender || user?.gender || null;
 
   const gCfg = {
     male:   { icon:'♂', label:'Male',   color:'#3b82f6', bg:'#eff6ff' },

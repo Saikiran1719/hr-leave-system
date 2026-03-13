@@ -69,15 +69,34 @@ async function renderProfile(container) {
                 ['Manager',     profile.ManagerName || '—'],
                 ['Joined',      fmtDate(profile.JoinedDate)],
                 ['Date of Birth', profile.DateOfBirth ? fmtDate(profile.DateOfBirth) : '—'],
-              ].map(([k, v]) => `
+                ['Gender', profile.Gender || null],
+              ].map(([k, v]) => {
+                // Gender gets a colored badge
+                if (k === 'Gender') {
+                  const gCfg = {
+                    male:   {icon:'♂',label:'Male',  color:'#3b82f6',bg:'#eff6ff'},
+                    female: {icon:'♀',label:'Female',color:'#ec4899',bg:'#fdf2f8'},
+                    other:  {icon:'⚧',label:'Other', color:'#8b5cf6',bg:'#f5f3ff'},
+                  };
+                  const g = gCfg[v];
+                  const badge = g
+                    ? `<span style="background:${g.bg};color:${g.color};border-radius:20px;padding:2px 9px;font-size:.82rem;font-weight:700">${g.icon} ${g.label}</span>`
+                    : `<span style="color:var(--text3);font-size:.82rem">Not set</span>`;
+                  return `<div style="background:var(--bg);border-radius:var(--radius-sm);padding:12px">
+                    <div style="font-size:.68rem;color:var(--text3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em">${k}</div>
+                    <div style="font-size:.88rem">${badge}</div>
+                  </div>`;
+                }
+                return `
                 <div style="background:var(--bg);border-radius:var(--radius-sm);padding:12px">
                   <div style="font-size:.68rem;color:var(--text3);margin-bottom:3px;
                               text-transform:uppercase;letter-spacing:.06em">${k}</div>
                   <div style="color:${k==='Employee ID'?'#0052cc':'var(--text)'};
                               font-weight:${k==='Employee ID'?'700':'500'};
                               font-size:.88rem;word-break:break-all;
-                              font-family:${k==='Employee ID'?'monospace':'inherit'}">${v}</div>
-                </div>`).join('')}
+                              font-family:${k==='Employee ID'?'monospace':'inherit'}">${v||'—'}</div>
+                </div>`;
+              }).join('')}
             </div>`}
         </div>
 
