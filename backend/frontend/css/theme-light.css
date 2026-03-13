@@ -1,0 +1,505 @@
+/*
+ * ================================================================
+ * HR LEAVE MANAGEMENT SYSTEM — PROFESSIONAL LIGHT THEME
+ * Jira / Workday / People-portal inspired
+ * Overrides the dark defaults in style.css
+ * ================================================================
+ */
+
+/* ── Re-map all CSS variables to light palette ── */
+html.theme-light {
+  --bg:          #f4f5f7;
+  --bg2:         #ffffff;
+  --surface:     #ffffff;
+  --surface2:    #f8f9fa;
+  --border:      #dfe1e6;
+  --border2:     #b3bac5;
+  --text:        #172b4d;
+  --text2:       #42526e;
+  --text3:       #8993a4;
+  --primary:     #0052cc;
+  --primary2:    #0065ff;
+  --success:     #006644;
+  --danger:      #bf2600;
+  --warning:     #ff8b00;
+  --info:        #0052cc;
+  --sidebar-w:   240px;
+  --sidebar-sm:  56px;
+  --topbar-h:    52px;
+  --radius:      6px;
+  --radius-sm:   4px;
+  --radius-lg:   8px;
+  --shadow:      0 1px 3px rgba(9,30,66,.13), 0 0 0 1px rgba(9,30,66,.08);
+  --shadow-md:   0 3px 10px rgba(9,30,66,.14), 0 0 0 1px rgba(9,30,66,.06);
+  --shadow-lg:   0 8px 24px rgba(9,30,66,.18);
+}
+
+/* ── Base ── */
+html.theme-light html, body {
+  background: #f4f5f7;
+  color: #172b4d;
+  font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+::-webkit-scrollbar-track { background: #f4f5f7; }
+::-webkit-scrollbar-thumb { background: #b3bac5; }
+::-webkit-scrollbar-thumb:hover { background: #8993a4; }
+
+/* ══════════════════════════════════════════
+   SIDEBAR — Atlassian-style navy blue
+══════════════════════════════════════════ */
+html.theme-light .sidebar {
+  background: #0052cc;
+  border-right: none;
+}
+
+html.theme-light .sidebar-logo {
+  background: #003d99;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  padding: 18px 16px 16px;
+}
+html.theme-light .logo-name { font-size: 1.05rem; font-weight: 800; color: #fff; letter-spacing: -.01em; }
+html.theme-light .logo-sub { color: rgba(255,255,255,.55); font-size: .63rem; }
+
+html.theme-light .nav-section-label {
+  color: rgba(255,255,255,.45);
+  font-size: .6rem;
+  padding: 16px 16px 4px;
+}
+
+html.theme-light .nav-item {
+  color: rgba(255,255,255,.8);
+  font-size: .875rem;
+  padding: 9px 16px;
+  border-radius: 0;
+  border: none;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+}
+html.theme-light .nav-item.active {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: #fff;
+  border-radius: 0 2px 2px 0;
+}
+html.theme-light .nav-item { position: relative; }
+
+html.theme-light .nav-badge {
+  background: #de350b;
+  color: #fff;
+}
+
+html.theme-light .sidebar-footer { border-top: 1px solid rgba(255,255,255,.12); }
+html.theme-light .sidebar-user-info .u-name { color: #fff; }
+html.theme-light .sidebar-user-info .u-role { color: rgba(255,255,255,.5); }
+
+html.theme-light .btn-signout {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.75);
+}
+.btn-signout:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+/* ── Topbar (mobile) ── */
+html.theme-light .topbar { background: #0052cc; }
+html.theme-light .topbar-logo { color: #fff; font-weight: 700; }
+html.theme-light .btn-menu { color: rgba(255,255,255,.85); }
+
+/* ══════════════════════════════════════════
+   MAIN AREA
+══════════════════════════════════════════ */
+html.theme-light .main-wrap { background: #f4f5f7; }
+html.theme-light .main-content { padding: 24px 28px; }
+
+/* ══════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════ */
+html.theme-light .card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(9,30,66,.1);
+}
+.card:hover { box-shadow: var(--shadow-md); }
+
+html.theme-light .card-title {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #8993a4;
+  margin-bottom: 14px;
+}
+
+/* ══════════════════════════════════════════
+   STAT CARDS — icon+number side by side
+══════════════════════════════════════════ */
+html.theme-light .stat-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(9,30,66,.1);
+}
+.stat-card.link:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+/* Override the old single-column stat layout */
+html.theme-light .stat-icon { display: none; }   /* old icon class hidden */
+html.theme-light .stat-val { font-size: 1.7rem; font-weight: 700; line-height: 1; color: #172b4d; }
+html.theme-light .stat-label { font-size: .76rem; color: #8993a4; margin-top: 4px; }
+
+/* New icon wrapper for light theme stat cards */
+html.theme-light .stat-icon-wrap {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   FORMS
+══════════════════════════════════════════ */
+html.theme-light .form-label { color: #42526e; font-size: .8rem; font-weight: 600; }
+
+html.theme-light .form-control {
+  background: #fff;
+  border: 2px solid #dfe1e6;
+  border-radius: 4px;
+  color: #172b4d;
+  font-size: .875rem;
+  padding: 8px 12px;
+}
+.form-control:hover  { border-color: #b3bac5; }
+.form-control:focus  { border-color: #0052cc; box-shadow: 0 0 0 2px rgba(0,82,204,.18); }
+.form-control::placeholder { color: #b3bac5; }
+
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+html.theme-light .btn { border-radius: 4px; font-weight: 500; font-size: .875rem; padding: 8px 16px; }
+
+html.theme-light .btn-primary { background: #0052cc; color: #fff; }
+.btn-primary:hover  { background: #0065ff; }
+.btn-primary:active { background: #003d99; }
+.btn-primary:disabled { background: #b3d4ff; }
+
+html.theme-light .btn-success { background: #00875a; color: #fff; }
+.btn-success:hover { background: #006644; }
+
+html.theme-light .btn-danger { background: #de350b; color: #fff; }
+.btn-danger:hover  { background: #bf2600; }
+
+html.theme-light .btn-ghost {
+  background: #f4f5f7;
+  color: #42526e;
+  border: 1px solid #dfe1e6;
+}
+.btn-ghost:hover { background: #ebecf0; border-color: #b3bac5; color: #172b4d; }
+
+/* ══════════════════════════════════════════
+   BADGES — Atlassian Lozenge style
+══════════════════════════════════════════ */
+html.theme-light .badge {
+  border-radius: 3px;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 2px 9px;
+}
+html.theme-light .badge-pending { background: #fff7d6; color: #974f0c; }
+html.theme-light .badge-approved { background: #e3fcef; color: #006644; }
+html.theme-light .badge-rejected { background: #ffebe6; color: #bf2600; }
+html.theme-light .badge-cancelled { background: #f4f5f7; color: #6b778c; }
+html.theme-light .badge-role { background: #eae6ff; color: #5243aa; text-transform: capitalize; }
+html.theme-light .badge-hr { background: #fff0b3; color: #974f0c; }
+html.theme-light .badge-manager { background: #e9f0ff; color: #0052cc; }
+
+html.theme-light .type-chip {
+  border-radius: 3px;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 2px 8px;
+}
+
+/* ══════════════════════════════════════════
+   TABS — underline style like Jira
+══════════════════════════════════════════ */
+html.theme-light .tabs {
+  border-bottom: 2px solid #dfe1e6;
+  gap: 0;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  display: flex;
+}
+html.theme-light .tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: 2px;
+  padding: 10px 16px;
+  font-size: .875rem;
+  font-weight: 400;
+  color: #8993a4;
+  cursor: pointer;
+  transition: color .12s, border-color .12s;
+  white-space: nowrap;
+}
+.tab:hover  { color: #17315f; background: #f4f5f7; }
+html.theme-light .tab.active { color: #0052cc; border-bottom-color: #0052cc; font-weight: 600; }
+
+/* ══════════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════════ */
+html.theme-light .progress { background: #ebecf0; border-radius: 4px; height: 6px; }
+
+/* ══════════════════════════════════════════
+   TABLE
+══════════════════════════════════════════ */
+html.theme-light table { background: #fff; }
+html.theme-light thead { background: #f8f9fa; }
+html.theme-light thead th {
+  color: #8993a4;
+  border-bottom: 2px solid #dfe1e6;
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+html.theme-light tbody td {
+  color: #172b4d;
+  border-bottom: 1px solid #f4f5f7;
+}
+tbody tr:hover { background: #f8f9fa; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* ══════════════════════════════════════════
+   TOASTS
+══════════════════════════════════════════ */
+html.theme-light .toast {
+  background: #fff;
+  color: #172b4d;
+  border-left: 4px solid;
+  border-radius: 6px;
+  box-shadow: var(--shadow-lg);
+  font-size: .85rem;
+}
+html.theme-light .toast.success { border-color: #36b37e; }
+html.theme-light .toast.error { border-color: #de350b; }
+html.theme-light .toast.warning { border-color: #ff8b00; }
+html.theme-light .toast.info { border-color: #0052cc; }
+
+/* ══════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════ */
+html.theme-light .modal-overlay { background: rgba(9,30,66,.54); }
+html.theme-light .modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  border: none;
+}
+html.theme-light .modal-header {
+  border-bottom: 1px solid #dfe1e6;
+  padding: 18px 22px;
+}
+html.theme-light .modal-title { font-size: .95rem; font-weight: 600; color: #172b4d; }
+html.theme-light .modal-close { color: #8993a4; }
+.modal-close:hover { background: #f4f5f7; color: #172b4d; }
+html.theme-light .modal-body { padding: 20px 22px; }
+html.theme-light .modal-footer {
+  border-top: 1px solid #dfe1e6;
+  background: #f8f9fa;
+  padding: 14px 22px;
+  border-radius: 0 0 8px 8px;
+}
+
+/* ══════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════ */
+html.theme-light .auth-wrap { background: #f4f5f7; }
+html.theme-light .auth-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+}
+html.theme-light .auth-logo h1 { color: #172b4d; }
+html.theme-light .auth-demo {
+  background: #f8f9fa;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  color: #8993a4;
+}
+html.theme-light .auth-demo b { color: #42526e; }
+
+/* ══════════════════════════════════════════
+   LEAVE CARDS
+══════════════════════════════════════════ */
+html.theme-light .leave-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(9,30,66,.08);
+}
+.leave-card:hover { box-shadow: var(--shadow-md); }
+html.theme-light .leave-footer { border-top: 1px solid #f4f5f7; color: #8993a4; }
+html.theme-light .leave-name { color: #172b4d; }
+html.theme-light .leave-dates { color: #8993a4; }
+
+/* ══════════════════════════════════════════
+   APPROVAL CARDS
+══════════════════════════════════════════ */
+html.theme-light .appr-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(9,30,66,.08);
+}
+html.theme-light .meta-box { background: #f8f9fa; border: 1px solid #dfe1e6; }
+html.theme-light .meta-lbl { color: #8993a4; }
+html.theme-light .meta-val { color: #172b4d; }
+
+/* ══════════════════════════════════════════
+   EMPLOYEE CARDS
+══════════════════════════════════════════ */
+html.theme-light .emp-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(9,30,66,.08);
+}
+.emp-card:hover { box-shadow: var(--shadow-md); }
+
+/* ══════════════════════════════════════════
+   AVATAR
+══════════════════════════════════════════ */
+html.theme-light .avatar { background: #0052cc; }
+
+/* ══════════════════════════════════════════
+   CALENDAR
+══════════════════════════════════════════ */
+html.theme-light .cal-wrap {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(9,30,66,.1);
+}
+html.theme-light .cal-head { background: #f8f9fa; color: #8993a4; border-bottom: 1px solid #dfe1e6; }
+html.theme-light .cal-cell {
+  border-right: 1px solid #f4f5f7;
+  border-bottom: 1px solid #f4f5f7;
+  background: #fff;
+}
+html.theme-light .cal-cell.weekend { background: #fafbfc; }
+html.theme-light .cal-cell.today { background: #e9f0ff; }
+html.theme-light .cal-cell.holiday { background: #fffbeb; }
+html.theme-light .cal-day { color: #8993a4; }
+
+/* Today circle */
+html.theme-light .cal-cell.today .cal-day {
+  background: #0052cc;
+  color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 700;
+}
+html.theme-light .cal-cell.holiday .cal-day { color: #92400e; }
+html.theme-light .cal-hol { background: #fef3c7; color: #92400e; }
+
+html.theme-light .cal-nav-btn {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  color: #42526e;
+  border-radius: 4px;
+}
+.cal-nav-btn:hover { background: #f4f5f7; border-color: #0052cc; color: #0052cc; }
+html.theme-light .cal-month-lbl { color: #172b4d; }
+
+/* ══════════════════════════════════════════
+   HOLIDAY CARDS (light, professional)
+══════════════════════════════════════════ */
+html.theme-light .holiday-card {
+  background: #fff;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex; gap: 14px; align-items: center;
+  box-shadow: 0 1px 3px rgba(9,30,66,.08);
+  transition: box-shadow .15s;
+}
+.holiday-card:hover { box-shadow: var(--shadow-md); }
+html.theme-light .holiday-card.past { opacity: .6; }
+html.theme-light .holiday-icon {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  background: #fff7d6;
+  border: 1px solid #f6d860;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+}
+html.theme-light .holiday-name { font-weight: 600; font-size: .9rem; color: #172b4d; }
+html.theme-light .holiday-date { font-size: .78rem; color: #0052cc; font-weight: 500; margin-top: 2px; }
+html.theme-light .holiday-wday { font-size: .72rem; color: #8993a4; }
+html.theme-light .holiday-past-tag {
+  margin-left: auto;
+  font-size: .68rem; color: #8993a4;
+  background: #f4f5f7; border: 1px solid #dfe1e6;
+  border-radius: 3px; padding: 2px 7px; flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   HR ADD HOLIDAY FORM
+══════════════════════════════════════════ */
+html.theme-light .add-holiday-panel {
+  background: #e9f0ff;
+  border: 1px dashed #0052cc;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+html.theme-light .add-holiday-panel .card-title { color: #0052cc; }
+
+/* ══════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════ */
+html.theme-light .empty { color: #8993a4; }
+html.theme-light .empty-icon { color: #b3bac5; }
+
+/* ══════════════════════════════════════════
+   LOADER
+══════════════════════════════════════════ */
+html.theme-light .spinner { border-color: #dfe1e6; border-top-color: #0052cc; }
+
+/* ══════════════════════════════════════════
+   INLINE ALERTS
+══════════════════════════════════════════ */
+html.theme-light .alert-info { background: #e9f0ff; color: #0052cc;  border-left: 3px solid #0052cc; }
+html.theme-light .alert-warning { background: #fff7d6; color: #974f0c;  border-left: 3px solid #ff8b00; }
+html.theme-light .alert-danger { background: #ffebe6; color: #bf2600;  border-left: 3px solid #de350b; }
+html.theme-light .alert-success { background: #e3fcef; color: #006644;  border-left: 3px solid #36b37e; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE overrides for tablet
+══════════════════════════════════════════ */
+@media (max-width: 1099px) {
+  html.theme-light .main-wrap { margin-left: var(--sidebar-sm); width: calc(100% - var(--sidebar-sm)); }
+}
+@media (max-width: 767px) {
+  html.theme-light .main-wrap { margin-left: 0 !important; width: 100% !important; }
+}

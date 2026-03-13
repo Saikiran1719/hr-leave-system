@@ -1,0 +1,173 @@
+/*
+ * ================================================================
+ * HR LEAVE MANAGEMENT SYSTEM — DARK THEME
+ * Applied when <html class="theme-dark">
+ * ================================================================
+ */
+
+html.theme-dark {
+  --bg:        #0f1117;
+  --bg2:       #161b22;
+  --surface:   #1c2128;
+  --surface2:  #21262d;
+  --border:    #30363d;
+  --border2:   #3d444d;
+  --text:      #e6edf3;
+  --text2:     #8d96a0;
+  --text3:     #6e7681;
+  --primary:   #6366f1;
+  --primary2:  #818cf8;
+  --success:   #3fb950;
+  --danger:    #f85149;
+  --warning:   #d29922;
+  --info:      #58a6ff;
+  --shadow:    0 1px 3px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
+}
+
+html.theme-dark body { background:#0f1117; color:#e6edf3; }
+
+/* Scrollbar */
+html.theme-dark ::-webkit-scrollbar-track { background:#161b22; }
+html.theme-dark ::-webkit-scrollbar-thumb { background:#3d444d; }
+html.theme-dark ::-webkit-scrollbar-thumb:hover { background:#6e7681; }
+
+/* ── SIDEBAR ─────────────────────────────── */
+html.theme-dark .sidebar { background:#161b22; border-right:1px solid #30363d; }
+html.theme-dark .sidebar-logo { background:#0d1117; border-bottom:1px solid #30363d; }
+html.theme-dark .logo-name { color:#e6edf3; }
+html.theme-dark .logo-sub  { color:#6e7681; }
+html.theme-dark .nav-section-label { color:#6e7681; }
+html.theme-dark .nav-item { color:#8d96a0; }
+html.theme-dark .nav-item:hover { background:#21262d; color:#e6edf3; }
+html.theme-dark .nav-item.active {
+  background:#1c2128; color:#6366f1;
+  border-left-color:#6366f1;
+}
+html.theme-dark .nav-icon { opacity:.8; }
+html.theme-dark .sidebar-footer { border-top:1px solid #30363d; }
+html.theme-dark .u-name { color:#e6edf3; }
+html.theme-dark .u-role { color:#6e7681; }
+html.theme-dark .btn-signout {
+  background:#21262d; border:1px solid #30363d; color:#8d96a0;
+}
+html.theme-dark .btn-signout:hover { background:#30363d; color:#e6edf3; }
+
+/* ── TOPBAR ─────────────────────────────── */
+html.theme-dark .topbar { background:#161b22; border-bottom:1px solid #30363d; }
+
+/* ── MAIN CONTENT ───────────────────────── */
+html.theme-dark .main-content { background:#0f1117; }
+html.theme-dark .main-wrap    { background:#0f1117; }
+html.theme-dark .page-title   { color:#e6edf3; }
+
+/* ── CARDS ──────────────────────────────── */
+html.theme-dark .card {
+  background:#161b22 !important;
+  border:1px solid #30363d !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+html.theme-dark .card-title { color:#8d96a0; }
+
+/* ── FORMS ──────────────────────────────── */
+html.theme-dark .form-control {
+  background:#0d1117 !important;
+  border:1px solid #30363d !important;
+  color:#e6edf3 !important;
+}
+html.theme-dark .form-control:focus {
+  border-color:#6366f1 !important;
+  box-shadow:0 0 0 3px rgba(99,102,241,.2) !important;
+}
+html.theme-dark .form-control::placeholder { color:#6e7681 !important; }
+html.theme-dark .form-label { color:#8d96a0 !important; }
+html.theme-dark select.form-control option { background:#1c2128; color:#e6edf3; }
+
+/* ── BUTTONS ────────────────────────────── */
+html.theme-dark .btn-secondary {
+  background:#21262d !important; border:1px solid #30363d !important; color:#e6edf3 !important;
+}
+html.theme-dark .btn-secondary:hover { background:#30363d !important; }
+html.theme-dark .btn-ghost {
+  background:transparent !important; border:1px solid #30363d !important; color:#8d96a0 !important;
+}
+
+/* ── TABLES ─────────────────────────────── */
+html.theme-dark table { color:#e6edf3; }
+html.theme-dark th {
+  background:#21262d !important;
+  color:#8d96a0 !important;
+  border-bottom:1px solid #30363d !important;
+}
+html.theme-dark tr:hover td { background:#1c2128 !important; }
+html.theme-dark td { border-bottom:1px solid #21262d !important; }
+
+/* ── STAT CARDS ─────────────────────────── */
+html.theme-dark .stat-card { background:#161b22 !important; border:1px solid #30363d !important; }
+html.theme-dark .stat-label { color:#6e7681 !important; }
+
+/* ── MODALS / OVERLAYS ──────────────────── */
+html.theme-dark [style*="background:#fff"],
+html.theme-dark [style*="background: #fff"],
+html.theme-dark [style*="background:white"] {
+  background:#161b22 !important;
+  color:#e6edf3 !important;
+}
+html.theme-dark [style*="background:#f8faff"],
+html.theme-dark [style*="background:#f1f5f9"],
+html.theme-dark [style*="background:#f8f9fa"],
+html.theme-dark [style*="background:#f4f5f7"] {
+  background:#1c2128 !important;
+}
+html.theme-dark [style*="background:#eef2ff"] { background:#1e1d3a !important; }
+html.theme-dark [style*="background:#f0fdf4"] { background:#0d1f14 !important; }
+html.theme-dark [style*="background:#fff1f2"],
+html.theme-dark [style*="background:#fee2e2"] { background:#1f0f0f !important; }
+html.theme-dark [style*="background:#fef9c3"],
+html.theme-dark [style*="background:#fefce8"] { background:#1a1600 !important; }
+html.theme-dark [style*="background:#e0f2fe"],
+html.theme-dark [style*="background:#eff6ff"] { background:#0c1929 !important; }
+
+/* ── TEXT COLOR OVERRIDES ───────────────── */
+html.theme-dark [style*="color:#1e293b"],
+html.theme-dark [style*="color:#334155"],
+html.theme-dark [style*="color:#0f172a"] { color:#e6edf3 !important; }
+html.theme-dark [style*="color:#64748b"],
+html.theme-dark [style*="color:#94a3b8"] { color:#8d96a0 !important; }
+html.theme-dark [style*="color:var(--text3)"] { color:#6e7681 !important; }
+
+/* ── BORDERS ─────────────────────────────── */
+html.theme-dark [style*="border:1.5px solid #e2e8f0"],
+html.theme-dark [style*="border: 1.5px solid #e2e8f0"],
+html.theme-dark [style*="border:1px solid #e2e8f0"] {
+  border-color:#30363d !important;
+}
+
+/* ── INPUTS inside inline styles ───────── */
+html.theme-dark input:not([type=range]):not([type=checkbox]):not([type=radio]),
+html.theme-dark textarea,
+html.theme-dark select {
+  background:#0d1117 !important;
+  border-color:#30363d !important;
+  color:#e6edf3 !important;
+}
+
+/* ── NOTIFICATION PANEL ─────────────────── */
+html.theme-dark #notif-panel { background:#161b22 !important; }
+html.theme-dark #notif-list  { background:#161b22; }
+
+/* ── PAYSLIP HTML (print page) ─────────── */
+html.theme-dark .print-btn { background:#6366f1; }
+
+/* ── DASHBOARD SPECIFIC ─────────────────── */
+html.theme-dark .badge-pending { background:#6366f1 !important; }
+
+/* ── LEAVE BALANCE BARS ─────────────────── */
+html.theme-dark [style*="background:#e2e8f0"] { background:#30363d !important; }
+
+/* ── SMOOTH TRANSITION ──────────────────── */
+html.theme-dark *,
+html.theme-light * {
+  transition: background-color .2s ease, border-color .2s ease, color .15s ease !important;
+}

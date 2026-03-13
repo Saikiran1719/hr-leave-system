@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HRnova</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Light theme overrides — loaded after base so variables cascade correctly -->
+  <link rel="stylesheet" href="css/theme-light.css" />
+  <link rel="stylesheet" href="css/theme-dark.css" />
+</head>
+<body>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- App root — JS renders into here -->
+<div id="app"></div>
+
+<!-- Modals (shared) -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <span class="modal-title" id="confirm-title">Confirm</span>
+      <button class="modal-close" onclick="closeModal('modal-confirm')">✕</button>
+    </div>
+    <p id="confirm-message" style="color:var(--text2);margin-bottom:4px"></p>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js?v=1773338492"></script>
+<script src="js/ui.js?v=1773338492"></script>
+<script src="js/auth.js?v=1773338492"></script>
+<script src="js/app.js?v=1773338492"></script>
+<script src="js/pages/dashboard.js?v=1773338492"></script>
+<script src="js/pages/apply.js?v=1773338492"></script>
+<script src="js/pages/myleaves.js?v=1773338492"></script>
+<script src="js/pages/calendar.js?v=1773338492"></script>
+<script src="js/pages/approvals.js?v=1773338492"></script>
+<script src="js/pages/employees.js?v=1773338492"></script>
+<script src="js/pages/balances.js?v=1773338492"></script>
+<script src="js/pages/reports.js?v=1773338492"></script>
+<script src="js/pages/holidays.js?v=1773338492"></script>
+<script src="js/pages/settings.js?v=1773338492"></script>
+<script src="js/pages/profile.js?v=1773338492"></script>
+<!-- PATCH: holidays for all roles + HR edit, UI additions -->
+<!-- HRnova Patches — load in order -->
+<script src="js/patches/patch-01-core-api-helpers.js?v=1773338492"></script>
+<script src="js/patches/patch-02-employees-page.js?v=1773338492"></script>
+<script src="js/patches/patch-03-csv-import-helpers.js?v=1773338492"></script>
+<script src="js/patches/patch-04-leave-balances-page.js?v=1773338492"></script>
+<script src="js/patches/patch-05-reports-page.js?v=1773338492"></script>
+<script src="js/patches/patch-06-holidays-settings-page.js?v=1773338492"></script>
+<script src="js/patches/patch-07-profile-page.js?v=1773338492"></script>
+<script src="js/patches/patch-08-myattendance-page.js?v=1773338492"></script>
+<script src="js/patches/patch-09-myattendance-page2.js?v=1773338492"></script>
+<script src="js/patches/patch-10-birthdays-page.js?v=1773338492"></script>
+<script src="js/patches/patch-11-ood-feature.js?v=1773338492"></script>
+<script src="js/patches/patch-12-notices-noticeboard.js?v=1773338492"></script>
+<script src="js/patches/patch-13-leave-calendar.js?v=1773338492"></script>
+<script src="js/patches/patch-14-phase1-bulk-encashment.js?v=1773338492"></script>
+<script src="js/patches/patch-15-phase1-audit-log.js?v=1773338492"></script>
+<script src="js/patches/patch-16-phase2-payslips.js?v=1773338492"></script>
+<script src="js/patches/patch-17-phase3a-shifts.js?v=1773338492"></script>
+<script src="js/patches/patch-18-phase3b-assets.js?v=1773338492"></script>
+<script src="js/patches/patch-19-phase4a-performance.js?v=1773338492"></script>
+<script src="js/patches/patch-20-phase4b-exit.js?v=1773338492"></script>
+<script src="js/patches/patch-21-notification-bell.js?v=1773338492"></script>
+<script src="js/patches/patch-22-splash-screen.js?v=1773338492"></script>
+<script src="js/patches/patch-23-dark-light-theme.js?v=1773338492"></script>
+<script src="js/patches/patch-24-face-attendance.js?v=1773338492"></script>
+<script src="js/patches/patch-25-holiday-import.js?v=1773338492"></script>
+<script src="js/patches/patch-26-nav-more.js?v=1773338492"></script>
+<script src="js/patches/patch-27-payroll-reports.js?v=1773338492"></script>
+<script src="js/patches/patch-29-24hour-time.js?v=1773338492"></script>
+<script>
+  // Boot
+  if (isLoggedIn()) { startApp(); }
+  else              { renderLogin(); }
+</script>
+</body>
+</html>
