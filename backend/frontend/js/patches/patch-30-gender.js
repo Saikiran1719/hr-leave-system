@@ -26,64 +26,9 @@ function _labelGenderLeaves(container) {
   });
 }
 
-// ── Profile page: show gender field with edit support ────────────
-const _origRenderProfile = window.renderProfile;
-if (_origRenderProfile) {
-  window.renderProfile = async function(container) {
-    await _origRenderProfile(container);
-    setTimeout(() => _injectGenderInProfile(container), 250);
-  };
-}
-
-async function _injectGenderInProfile(container) {
-  if (container.querySelector('[data-gender-injected]')) return;
-
-  // Always fetch fresh from API — localStorage may be stale
-  let gender = null;
-  try {
-    const profile = await api.me();
-    gender = profile?.Gender || profile?.gender || null;
-  } catch(e) {
-    // fallback to localStorage
-    const user = getUser();
-    gender = user?.Gender || user?.gender || null;
-  }
-
-  // Find the info grid cells
-  const cells = container.querySelectorAll('[style*="background:var(--bg)"][style*="border-radius"]');
-  if (!cells.length) return;
-
-  const gCfg = {
-    male:   { icon:'♂', label:'Male',   color:'#3b82f6', bg:'#eff6ff' },
-    female: { icon:'♀', label:'Female', color:'#ec4899', bg:'#fdf2f8' },
-    other:  { icon:'⚧', label:'Other',  color:'#8b5cf6', bg:'#f5f3ff' },
-  };
-  const cfg = gCfg[gender];
-  const badge = cfg
-    ? `<span style="background:${cfg.bg};color:${cfg.color};border-radius:20px;
-         padding:2px 9px;font-size:.82rem;font-weight:700">${cfg.icon} ${cfg.label}</span>`
-    : `<span style="color:var(--text3);font-size:.82rem">Not set</span>`;
-
-  // Insert after the Phone cell
-  const phoneCell = [...cells].find(c =>
-    c.querySelector('div')?.textContent?.trim().toLowerCase() === 'phone'
-  );
-  if (!phoneCell) return;
-
-  const gCell = document.createElement('div');
-  gCell.setAttribute('data-gender-injected','1');
-  gCell.style.cssText = phoneCell.style.cssText;
-  gCell.innerHTML = `
-    <div style="font-size:.68rem;color:var(--text3);margin-bottom:3px;
-                text-transform:uppercase;letter-spacing:.06em">Gender</div>
-    <div style="font-weight:500;font-size:.88rem">${badge}</div>`;
-  phoneCell.after(gCell);
-}
-
-// ── Leave Balances: hide gender-restricted types from balance view
-// Backend already does this; this is just a safety UI layer
-const _origRenderBalances2 = window.renderBalancesEmployee;
-// No-op: backend handles this correctly via AllowedGender filter
+// ── Profile page gender injection REMOVED ────────────────────────
+// Gender is already shown in the profile info grid via patch-05.
+// Having it here too caused the field to appear twice.
 
 // ── Settings → Leave Types table: show "Allowed For" column ─────
 const _origRenderSettings = window.renderSettings;
